@@ -61,6 +61,18 @@ var testFile = function (fileName) {
       t.end()
     })
   }
+
+  var juliaFilePath = './fixtures/julia_output/' + fileName.replace('txt', 'jl')
+  var juliaTestName = 'Julia: ' + fileName.replace(/_/g, ' ').replace('.txt', '')
+
+  if (fs.existsSync(juliaFilePath)) {
+    var goodJuliaCode = fs.readFileSync(juliaFilePath, 'utf-8')
+    var juliaCode = curlconverter.toJulia(inputFileContents)
+    test(juliaTestName, function (t) {
+      t.equal(juliaCode, goodJuliaCode)
+      t.end()
+    })
+  }
 }
 // get --test=test_name parameter and just run that test on its own
 var testName = yargs.argv.test
